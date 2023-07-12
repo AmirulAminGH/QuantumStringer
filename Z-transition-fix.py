@@ -246,9 +246,12 @@ finalArray=updated_line_2
 
 for idc in range(len(finalArray)):
     if 'G06' in finalArray[idc][0]:
-        swapval=finalArray[idc][1]
+        swapvalx=finalArray[idc][1]
         finalArray[idc][1]=finalArray[idc-1][1]
-        finalArray[idc-1][1]=swapval
+        finalArray[idc-1][1]=swapvalx
+        swapvaly = finalArray[idc][2]
+        finalArray[idc][2] = finalArray[idc - 1][2]
+        finalArray[idc - 1][2] = swapvaly
         finalArray[idc][0]="G01"
     if 'G07' in finalArray[idc][0]:
         # swapval = finalArray[idc][1]
