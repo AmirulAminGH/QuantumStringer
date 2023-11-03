@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+  
+<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+
+<link rel="shortcut icon" type="image/x-icon" href="quantumlogo.ico" />
+
+<link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+
+
+  <title>Q-Stringer Beta</title>
+  
+  <link rel='stylesheet' href='bootstrap-3.3.7-dist/css/bootstrap.css'>
+  <link rel='stylesheet' href='style2.css'>
+  <link rel='stylesheet' href='style1.css'>
+  <script src="p5.js"></script>
+  <script src="layerview.js"></script>
+<script>
+   var myCanvas = createCanvas(winWidth, winHeight);
+    myCanvas.parent();
+</script>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+</head>
+
+<body translate="no" >
+  <head>
+   <link rel="stylesheet" href="fontawesome-free-5.15.4-web/css/all.css">
+</head>
+
+<body onload="">
+   <nav class="navbar navbar-default no-margin">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header fixed-brand">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+</button>
+         <a class="navbar-brand" href="#"><i class="fa fa-wrench fa-4"></i> Q-Stringer 1 (V0.9)</a>
+      </div>
+      <!-- navbar-header-->
+
+      <!-- bs-example-navbar-collapse-1 -->
+   </nav>
+  
+     
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+         <div class="container-fluid xyz">
+            <div class="row" >
+               <div class="col-sm-1 panel panel-info">
+                <!-- <h3 class="panel-heading">FUNCTIONS</h3> -->
+
+                <button type="button"  class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalJog" ><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-expand"></span></button>
+                <button type="button" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalSpeed"><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-equalizer"></span></button>
+                <button type="button" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalBullseye"><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-eye-open"></span></button>
+                <button type="button" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalUpload"><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-upload"></span></button>
+
+               
+                
+               </div>
+               <div class="col-sm-10 panel panel-info">
+                <!-- <h3 class="panel-heading text-center">MAIN</h3> -->
+                
+                <div class="progress">
+                  <div id="percentage" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                    
+                  </div>
+                </div>
+                <div class="mb-3">
+                   
+                 
+                    <button id="btnrun" class="btn btn-success" style="margin-bottom:10px;margin-top: 10px;" onclick="BTNrun()">Run</button>
+                    <button id="btnstop" class="btn btn-danger" style="margin-bottom:10px;margin-top: 10px;" onclick="BTNstop()">Stop</button>
+                    <button  id="btnpause" class="btn btn-warning" style="margin-bottom:10px;margin-top: 10px;" onclick="BTNpause()">Pause</button>
+                    <button id="btnresume" class="btn btn-info" style="margin-bottom:10px;margin-top: 10px;" onclick="BTNresume()">Resume</button>
+                    <button id="btnlayer" class="btn btn-primary" style="margin-bottom:10px;margin-top: 10px;" data-toggle="modal" data-target="#ModalLayer">Layer Selection</button>
+            
+                
+                    </div>
+               
+                    <!-- <div class="panel-heading text-center" style="margin-top: 10px;margin-bottom: 10px;" >LAYERS VIEW</div> -->
+
+                
+                  <div id="layerviewer" class="col-sm-12" style="overflow: scroll;" >
+                  </div>
+            </div>
+            <script>
+               var fxbuttons = document.getElementsByName("fxbutton");
+            </script>
+            <div class="col-sm-1 panel panel-info">
+                <!-- <h3 class="panel-heading">console</h3> -->
+                <!-- Message: <input type="text" id="myText" >
+                <button onclick="sendMsg()">Send Msg</button> -->
+                <button type="button"  class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalConsole" ><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-text-size"></span></button>
+                <button type="button"  class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalInfo" ><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-info-sign"></span></button>
+                <button type="button"  class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalDev" ><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;" data-toggle="modal" data-target="#ModalMaintenance"><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-wrench"></span></button>
+            </div>
+            </div>
+         </div>
+      </div>
+      <!-- /#page-content-wrapper -->
+
+   <!-- /#wrapper -->
+   <!-- jQuery -->
+
+  
+  <!-- Modal Jog -->
+  <div class="modal fade" id="ModalJog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">JOG FUNCTIONS</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogleft();"><span  id="JOGRIGHTid"style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-circle-arrow-left"></span></button>
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogright()"><span  id="JOGLEFTid" style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-circle-arrow-right"></span></button>
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogforward()"><span  id="JOGFORWARDid"style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-circle-arrow-up"></span></button>
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogreverse()"><span  id="JOGREVERSEid"style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-circle-arrow-down"></span></button>
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogcw()"><span  id="JOGCWid"style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-menu-left"></span></button>
+            <button name="fxbutton" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNjogccw()"><span  id="JOGCCWid"style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-menu-right"></span></button>
+            <button name="fxbutton" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNpenup()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-hand-up"></span></button>
+            <button name="fxbutton" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNpendown()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-hand-down"></span></button>
+           <div>
+                 
+                <label for="customRange1" class="form-label">Jog Speed (mm/s) : <span id="JOGSPEEDid"></span></label><input type="range" class="form-range" id="JogSpeedRange" min="1" max="1000" value="10">
+                <label for="customRange1" class="form-label">Jog Distance (mm) : <span id="JOGDISTANCEid"></span></label><input type="range" class="form-range" id="JogDistanceRange" min="1" max="1000" value="10">
+                     <script>
+var slider1 = document.getElementById("JogSpeedRange");
+var output1 = document.getElementById("JOGSPEEDid");
+output1.innerHTML = slider1.value;
+var sliderValue1 = slider1.value;
+slider1.oninput = function() {var newValue = this.value;output1.innerHTML = this.value;sliderValue1 = newValue;BTNjogspeed(sliderValue1);console.log(sliderValue1);}
+
+
+var slider2 = document.getElementById("JogDistanceRange");
+var output2 = document.getElementById("JOGDISTANCEid");
+output2.innerHTML = slider2.value;
+var sliderValue2 = slider2.value;
+slider2.oninput = function() {var newValue2 = this.value;output2.innerHTML = this.value;sliderValue2 = newValue2;BTNjogdistance(sliderValue2);console.log(sliderValue2);}
+
+
+                     </script>
+                
+                
+               
+               </div>   
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Pin Tab</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Speed -->
+  <div class="modal fade" id="ModalSpeed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">SPEED SELECTION</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+            <div class="mb-3">
+                <div class="mb-3"  style="margin-bottom:10px;margin-top: 10px;">
+                  <h5 class="text-center" >Current Speed:</h5>
+                  <h4 class="text-center" style="font-weight: bold;" id="default_speed_id">mm/s</h4>
+                  <h5 class="text-center" >Max Allowable Speed:</h5>
+                  <h4 class="text-center" style="font-weight: bold;" id="max_feedrate_id">mm/s</h4>
+                  <h5 class="text-center" >Min Allowable Speed:</h5>
+                  <h4 class="text-center" style="font-weight: bold;" id="min_feedrate_id">mm/s</h4>
+                <button id="SpeedDefaultId" class="btn btn-info" onclick="SpeedDefault()">Default  &nbsp<span class="glyphicon glyphicon-bookmark"></span></button>
+               
+                <button id="SpeedMinus100Id" class="btn btn-danger" onclick="FeedrateMinus100()"><span class="glyphicon glyphicon-fast-backward"></span>&nbsp 100</button>
+                <button id="SpeedMinus10Id" class="btn btn-danger" onclick="FeedrateMinus10()"><span class="glyphicon glyphicon-backward"></span>&nbsp 10</button>
+                <button id="SpeedAdd10Id" class="btn btn-success" onclick="FeedratePlus10()">10  &nbsp<span class="glyphicon glyphicon-forward"></span></button>
+                <button id="SpeedAdd100Id" class="btn btn-success" onclick="FeedratePlus100()">100  &nbsp<span class="glyphicon glyphicon-fast-forward"></span></button>
+                
+                </div>
+              </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Pin Tab</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!-- Modal Bullseye -->
+ <div class="modal fade" id="ModalBullseye" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">BULLSEYE</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+       <div class="mb-3">
+                <button id="bull1" class="btn btn-danger" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyeenable()" ><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-eye-open"></span></button>
+                <button id="bull2" class="btn btn-danger" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyedisable()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-eye-close"></span></button>
+                <button id="bull3" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyeprev10()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-fast-backward"></span></button>
+                <button id="bull4" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyeprev1()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-backward"></span></button>
+                <button id="bull5" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyenext1()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-forward"></span></button>
+                <button id="bull6" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyenext10()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-fast-forward"></span></button>
+                <button id="bull7" class="btn btn-success" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="BTNbullseyego()"><span  style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-play"></span></button>
+                <button id="bullcounter" class="btn btn-warning" style="margin-top: 0.3em;margin-bottom: 0.3em;">ID:</button>
+
+             </div>
+   
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Pin Tab</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Upload -->
+ <div class="modal fade" id="ModalUpload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">SELECT / UPLOAD JOB</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" type="text" value="Current Job Card: Meringue 2021" aria-label="readonly input example" readonly>
+        <br>
+        <input class="form-control" type="file" id="gcodefile">
+        <br>
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">JOBCARD NUMBER
+            </label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter JobCard Number">
+          </div>
+          <button type="submit" class="btn btn-primary">Load JobCard  &nbsp<span class="glyphicon glyphicon-cloud-upload"></span></button>
+        </form>
+        <br>
+        <button class="btn btn-success">Scan Jobcard &nbsp<span class="glyphicon glyphicon-camera"></span></button>
+        
+ 
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- Modal Console -->
+ <div class="modal fade" id="ModalConsole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">CONSOLE</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <h5 id="consolemsg" style="height:40vh ; overflow:auto;">console message will appear here</h5>
+            <button class="btn btn-info" style="margin-bottom:10px" onclick="BTNclearconsole()">Clear Log</button>
+            <br>
+           <input type="text" id="consolecommand" placeholder="G-code/console command">
+           <button class="btn btn-info" style="margin-bottom:10px;margin-top: 10px;" onclick="BTNsubmitconsole()">RUN</button>
+
+   
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Modal Info -->
+ <div class="modal fade" id="ModalInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">SYSTEM CONTROL</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center" >Job Name:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="SailNameId">Foot Panel Meringue 20332</h4>
+          <h5 class="text-center" >Fibre Type:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="FibreTypeId">Tenax Carbon</h4>
+          <h5 class="text-center" >Strand Count:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="FibreCountId">16</h4>
+          <h5 class="text-center" >Default Speed:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="FibreSpeedId">500mm/s</h4>
+          <h5 class="text-center" >Glue Temperature:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="FibreTempId">120C</h4>
+          <h5 class="text-center" >Tool:</h5>
+          <h4 class="text-center" style="font-weight: bold;" id="ToolId">Stringing</h4>
+          
+          
+   
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <!-- Modal Dev -->
+ <div class="modal fade" id="ModalDev" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">PARAMETER SET</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <button name="fxbutton" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="GOHOME();AnimatePoint(40,850);"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-home"></span></button>
+            <button name="fxbutton" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="GOZERO()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-move"></span></button>
+            <button name="fxbutton" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="SQUARE()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-fullscreen"></span></button>
+            <button name="fxbutton" class="btn btn-info" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="SETZERO()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-screenshot"></span></button>
+            <button name="fxbutton" class="btn btn-danger" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="UNLOCK()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-link"></span></button>
+            <button name="fxbutton" class="btn btn-danger" style="margin-top: 0.3em;margin-bottom: 0.3em;"onclick="SOFTRESET()"><span  style="cursor: pointer;font-size: 2em;" href="#" class="glyphicon glyphicon-refresh"></span></button>
+            
+   
+   
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Maintenance -->
+  <div class="modal fade" id="ModalMaintenance" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">MAINTENANCE SCHEDULE</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center" >Estimated time before maintenance: </h5>
+          <h4 class="text-center" style="font-weight: bold;" id="MTBFETAid">12:12:32:43</h4>
+
+          <h5 class="text-center" >Next Maintenace Date: </h5>
+          <h4 class="text-center"  style="font-weight: bold;" id="MTBFETAid">13th December 2023</h4>
+
+          <h5 class="text-center" >Session run-time: </h5>
+          <h4 class="text-center"  style="font-weight: bold;" id="ActiveRunTimeId">12:12:32:43</h4>
+
+          <h5 class="text-center" >Current MTBF: </h5>
+          <h4 class="text-center"  style="font-weight: bold;" id="TotalUpTimeId">12:12:32:43</h4>
+
+          <button class="btn btn-danger" href="#" onclick="handshake()">Maintenace Dashboard <span class="glyphicon glyphicon-dashboard"></span></button>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+   <!-- Modal Layer -->
+   <div class="modal fade" id="ModalLayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">LAYER SELECTION</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="layerSelect" >
+           
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="checkAllButton">Check All</button>
+          <button type="button" class="btn btn-secondary" id="uncheckAllButton">Uncheck All</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="checkCheckbox()">Save changes</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Modal Message -->
+ <div class="modal fade" id="ModalMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">CHAT ASSISTANCE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5 id="username_placeholder" style="tex">Your username:</h5>
+        <input type="text" id="usernametext" placeholder="key-in name to start messaging">
+        <button  id ="usernamebutton" class="btn btn-info" style="margin-bottom:10px;margin-top: 10px;" onclick="SubmitUsername()">SUBMIT NAME</button>
+        
+
+          <h5 id="chatmsginbound" style="height:40vh ; overflow:auto;"></h5>
+
+
+        <input type="text" id="chatmsgoutbound" placeholder="your message">
+         <button id="chatsend" class="btn btn-info" style="margin-bottom:10px;margin-top: 10px;" onclick="SubmitMessage()">SEND</button>
+
+        <script>
+          document.getElementById("chatmsgoutbound").disabled=true;
+          document.getElementById("chatbutton").disabled=true;
+        </script>
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <button type="button" class="btn btn-warning" style="position: fixed;bottom: 20px;right: 20px;" data-toggle="modal" data-target="#ModalMessage"><span style="cursor: pointer;font-size: 2em;" class="glyphicon glyphicon-envelope"></span></button>
+</div>
+  
+</body>
+
+</html>
+<!-- HTML END--------------------------------------------------------------------------------------------------------------------- -->
+   
+<script src='jquery.js'></script>
+<script src='bootstrap-3.3.7-dist/js/bootstrap.js'></script>
+  <script id="rendered-js" >
+$("#menu-toggle").click(function (e) {
+  e.preventDefault();
+  $("#wrapper").toggleClass("toggled");
+});
+$("#menu-toggle-2").click(function (e) {
+  e.preventDefault();
+  $("#wrapper").toggleClass("toggled-2");
+  $('#menu ul').hide();
+});
+
+function initMenu() {
+  $('#menu ul').hide();
+  $('#menu ul').children('.current').parent().show();
+  //$('#menu ul:first').show();
+  $('#menu li a').click(
+  function () {
+    var checkElement = $(this).next();
+    if (checkElement.is('ul') && checkElement.is(':visible')) {
+      return false;
+    }
+    if (checkElement.is('ul') && !checkElement.is(':visible')) {
+      $('#menu ul:visible').slideUp('normal');
+      checkElement.slideDown('normal');
+      return false;
+    }
+  });
+
+}
+$(document).ready(function () {
+  initMenu();
+});
+//# sourceURL=pen.js
+    </script>
+
+<!-- -----------------------------------------------------------CUSTOM SCRIPT BEGIN---------------------------------------------- -->
+<script>
+//INTERNAL VARIABLE-------------------------------------------------------------------------------------
+//class A var
+var total_user_count=0;
+var network_status="offline";
+var move_status="idle";
+var move_state=true;
+var real_time_position="X123Y312Z123";
+var offset_position="X0Y0Z0";
+var end_effector="string";
+var last_sent_move="N100 G01 X123 Y123";
+var feedrate_change=false;
+var feedrate="F10000";
+var emergency_stop=false;
+var maintenance_stop=false;
+var callibration_enable=false;
+var callibration_error_warning=false;
+var callibration_error_threshold=0.2;
+var current_callibration_error=0.1;
+
+//class B var
+var jog_speed=10.0    //mm/s
+var jog_distance=10.0 //mm
+//class C var
+var local_client_name=""
+
+//INTERNAL VARIABLE REFRESH-----------------------------------------------------
+function ButtonStateUpdate(){
+  document.getElementById("btnrun").disabled=move_state;
+  document.getElementById("btnstop").disabled=!move_state;
+  document.getElementById("btnpause").disabled=!move_state;
+  document.getElementById("btnresume").disabled=move_state;
+  document.getElementById("btnlayer").disabled=move_state;
+}
+//setInterval(ButtonStateUpdate,1000); not needed 
+function SubmitUsername(){
+  local_client_name=document.getElementById("usernametext").value;
+  console.log(local_client_name);
+  document.getElementById("usernametext").hidden=true;
+  document.getElementById("usernamebutton").style.display="none";
+  document.getElementById("username_placeholder").innerHTML="You are chatting as : <b>"+local_client_name+"</b>";
+  document.getElementById("chatmsgoutbound").disabled=false;
+  document.getElementById("chatbutton").disabled=false; 
+}
+
+
+  document.addEventListener('DOMContentLoaded',function(){
+  });
+// WEBSOCKET INIT---------------------------------------------------------------------------------------------------------------
+const socket = new WebSocket('wss://websocket.quantumrnd.com');
+socket.addEventListener('open', function (event) {console.log('Connected to the WS Server!')});
+socket.addEventListener('close', function (event) {console.log('Disconnected from the WS Server!')});
+ 
+// WEBSOCKET OUTBOUND ELEMENT----------------------------------------------------------------------------------------------------
+const handshake = () => {socket.send("Hello from webclient");}
+
+const BTNrun =()=> {socket.send("#CMD#BTNrun")}
+const BTNstop =()=> {socket.send("#CMD#BTNstop")}
+const BTNpause =()=> {socket.send("#CMD#BTNpause")}
+const BTNresume =()=> {socket.send("#CMD#BTNresume")}
+const BTNjogforward =()=>{socket.send("#CMD#BTNjogforward")}
+const BTNjogreverse =()=>{socket.send("#CMD#BTNjogreverse")}
+const BTNjogright =()=>{socket.send("#CMD#BTNjogright")}
+const BTNjogleft = ()=>{socket.send("#CMD#BTNjogleft")}
+const BTNjogcw = () =>{socket.send("#CMD#BTNjogcw")}
+const BTNjogccw = () =>{socket.send("#CMD#BTNjogccw")}
+const BTNpenup = ()=>{socket.send("#CMD#BTNtoolup")}
+const BTNpendown = ()=>{socket.send("#CMD#BTNtooldown")}
+
+const SpeedDefault = () =>{socket.send("#CMD#BTNdefaultspeed")} 
+const FeedratePlus10 = () =>{socket.send("#CMD#BTNspeedadd10")}
+const FeedrateMinus10 = () =>{socket.send("#CMD#BTNspeedminus10")}
+const FeedratePlus100 = () =>{socket.send("#CMD#BTNspeedadd100")}
+const FeedrateMinus100 = () =>{socket.send("#CMD#BTNspeedminus100")}
+
+const BTNbullseyeenable = () =>{socket.send("#CMD#BTNbullseyeenable")}
+const BTNbullseyedisable = () =>{socket.send("#CMD#BTNbullseyedisable")}
+const BTNbullseyenext1 = () =>{socket.send("#CMD#BTNbullseyenext1")}
+const BTNbullseyeprev1 = () =>{socket.send("#CMD#BTNbullseyeprev1")}
+const BTNbullseyenext10 = () =>{socket.send("#CMD#BTNbullseyenext10")}
+const BTNbullseyeprev10 = () =>{socket.send("#CMD#BTNbullseyeprev10")}
+const BTNbullseyego = () =>{socket.send("#CMD#BTNbullseyego")}
+
+
+
+
+function BTNjogspeed(sliderValue1){socket.send("#CMD#VALUEjogspeed"+sliderValue1)}
+function BTNjogdistance(sliderValue2){socket.send("#CMD#VALUEjogdistance"+sliderValue2)}
+function SubmitMessage(){
+  socket.send("#MSG@@@"+local_client_name+"$$$"+document.getElementById("chatmsgoutbound").value);
+  document.getElementById("chatmsgoutbound").value="";}
+function BTNsubmitconsole(){
+  socket.send("#CMD#CSL%"+document.getElementById("consolecommand").value);
+  document.getElementById("consolecommand").value="";}
+
+
+
+
+//WEBSOCKET INBOUND ELEMENT------------------------------------------------------------------------------------------------------
+socket.addEventListener('message', function (event) {
+        console.log("Server sent:" + event.data);
+        console.log("--------------------");
+        var INBOUND = event.data;
+        switch(INBOUND){
+          case "#STATE@move_state%true":move_state=true;ButtonStateUpdate();break;
+          case "#STATE@move_state%false":move_state=false;ButtonStateUpdate();break;
+        }
+        switch(true){
+          case INBOUND.includes("#DATA@jog_speed%"):sliderValue1=parseFloat(INBOUND.replace('#DATA@jog_speed%',''));updateSlider1();break;
+          case INBOUND.includes("#DATA@jog_distance%"):sliderValue2=parseFloat(INBOUND.replace('#DATA@jog_distance%',''));updateSlider2();break;
+          case INBOUND.includes("#MSG#"):document.getElementById("chatmsginbound").innerHTML=INBOUND.replace('#MSG#','');break;
+          case INBOUND.includes("#DATA@feedratenow%"):document.getElementById("default_speed_id").innerHTML=INBOUND.replace('#DATA@feedratenow%','')+" mm/s";break;
+          case INBOUND.includes("#DATA@feedratemax%"):document.getElementById("max_feedrate_id").innerHTML=INBOUND.replace('#DATA@feedratemax%','')+" mm/s";break;
+          case INBOUND.includes("#DATA@feedratemin%"):document.getElementById("min_feedrate_id").innerHTML=INBOUND.replace('#DATA@feedratemin%','')+" mm/s";break;
+          case INBOUND.includes("#DATA@bullcounter%"):document.getElementById("bullcounter").innerHTML="ID: "+INBOUND.replace("#DATA@bullcounter%","");break;
+          case INBOUND.includes("#CSL@log%"):document.getElementById("consolemsg").innerHTML=INBOUND.replace("#CSL@log%");break;
+        }
+
+});
+
+//WEBSOCKET POST PROCESS FUNCTION-----------------------------------------------------------------------------------------------------------
+function updateSlider1(){output1.innerHTML=sliderValue1;slider1.value=sliderValue1;}
+function updateSlider2(){output2.innerHTML=sliderValue2;slider2.value=sliderValue2;}
+//WEBSOCKET END--------------------------------------------------------------------------------------------------------------------
+
+document.getElementById('gcodefile')
+            .addEventListener('change', function() {
+              
+            var fullPath = document.getElementById('gcodefile').value;
+            if (fullPath) {
+            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            var filename = fullPath.substring(startIndex);
+             if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+            filename = filename.substring(1);}
+
+              
+            fr.readAsText(this.files[0]);
+            
+         
+            alert("Succesfully uploaded : "+filename);
+            button1.disabled=false;
+            buttonbull5.disabled=false;
+
+}
+        })
+    
+//------------QOL improvement----------------------
+
+
+
+
+
+
+</script>
+<!-- -----------------------------------------------------------CUSTOM SCRIPT END---------------------------------------------- -->
+<script>
+    const myDiv = document.getElementById("layerviewer");
+  let panelWidth = myDiv.clientWidth;
+  let panelHeight = myDiv.clientHeight;
+  let globalWidth =screen.width;
+  let globalHeight=screen.height;
+</script>
+</body>
+
+</html>
+ 
